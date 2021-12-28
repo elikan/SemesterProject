@@ -26,7 +26,7 @@ public class Master {
                 InputStream requestReader = socket.getInputStream();
                 ObjectInputStream objectInputStream = new ObjectInputStream(requestReader);
                 Object O = objectInputStream.readObject();
-                if (O instanceof Slave) {
+                if (O.getClass()== Slave.class) {
                     Slave slave = (Slave) O;
                     System.out.println("Slave Connected");
                 } else {
