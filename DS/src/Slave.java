@@ -3,31 +3,35 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 
-enum slaveType {A, B}
-
 public class Slave implements Serializable {
-    private final slaveType type;
+    private Type type;
     private Socket socket;
-
-    public Slave(slaveType type) {
+    public Slave(Type type) {
         this.type = type;
         communicate();
     }
+    public Slave() {
+        this.type = Type.A;
+    }
 
-    private void communicate() {
-        try (
-                Socket socket = new Socket("127.0.0.1", 30121);
+        private void communicate() {
+        try (Socket socket = new Socket("127.0.0.1", 30121);
         ) {
             System.out.println("Slave " + type.name() + " is communicating");
+            // Sends the slave object
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-            Slave slave = this;
+            Slave slave = new Slave();
+            slave.setType(type);
             outputStream.writeObject(slave);
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
     }
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     public static void main(String[] args) {
-        Slave slave1 = new Slave(slaveType.A);
-        Slave slave2 = new Slave(slaveType.B);
+        Slave slave2 = new Slave(Type.B);
     }
 }

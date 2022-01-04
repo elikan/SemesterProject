@@ -20,6 +20,7 @@ public class Master {
     public void startprogram() {
         try (ServerSocket serverSocket = new ServerSocket(portNumber);
         ) {
+            // As long as have room for clients. We continue to accept.
             while (clients.size() < 4) {
                 socket = serverSocket.accept();
                 System.out.println("Connecting");
@@ -27,12 +28,9 @@ public class Master {
                 ObjectInputStream objectInputStream = new ObjectInputStream(requestReader);
                 Object O = objectInputStream.readObject();
                 if (O.getClass()== Slave.class) {
-                    Slave slave = (Slave) O;
                     System.out.println("Slave Connected");
                 } else {
-                    Client client = (Client) O;
                     System.out.println("Client Connected");
-
                 }
                 clients.add(O);
             }
