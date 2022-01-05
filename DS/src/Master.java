@@ -8,7 +8,9 @@ import java.util.ArrayList;
 public class Master {
     private int portNumber;
     private ArrayList<Object> clients = new ArrayList<Object>();
+    private ArrayList<Job> jobs = new ArrayList<Job>();
     private Socket socket;
+    ObjectInputStream objectInputStream;
 
     public Master(int portNumber) {
         this.portNumber = portNumber;
@@ -25,7 +27,7 @@ public class Master {
                 socket = serverSocket.accept();
                 System.out.println("Connecting");
                 InputStream requestReader = socket.getInputStream();
-                ObjectInputStream objectInputStream = new ObjectInputStream(requestReader);
+                objectInputStream = new ObjectInputStream(requestReader);
                 Object O = objectInputStream.readObject();
                 if (O.getClass()== Slave.class) {
                     System.out.println("Slave Connected");
@@ -33,12 +35,16 @@ public class Master {
                     System.out.println("Client Connected");
                 }
                 clients.add(O);
+                getJob();
             }
         } catch (IOException | ClassNotFoundException e) {
             System.out.println(
                     "Exception caught when trying to listen on port " + portNumber + " or listening for a connection");
             System.out.println(e.getMessage());
         }
+    }
+    public void getJob() throws IOException, ClassNotFoundException {
+        jobs.add((Job)objectInputStream.readObject());
     }
     public static void main(String[] args) {
         Master master = new Master(30121);
