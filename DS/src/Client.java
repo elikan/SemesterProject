@@ -5,9 +5,8 @@ import java.net.UnknownHostException;
 public class Client implements Serializable {
     private String hostName;
     private int portNumber;
-    ObjectOutputStream outputStream;
+    static ObjectOutputStream outputStream;
     private Socket clientSocket;
-    public static int clientID=0;
     public static int ID=0;
 
     Client(String hostName, int portNumber) {
@@ -24,8 +23,6 @@ public class Client implements Serializable {
             outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             Client client = this;
             outputStream.writeObject(client);
-            // Next clientID will be 1000 more
-            clientID+=1000;
             //flush is to clear the output stream
             outputStream.flush();
             createjob();
@@ -48,7 +45,7 @@ public class Client implements Serializable {
         else{
             T=Type.B;
         }
-        Job job = new Job(T,ID+clientID);
+        Job job = new Job(T,ID);
         ID++;
         outputStream.writeObject(job);
     }

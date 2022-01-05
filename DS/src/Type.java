@@ -1,2 +1,1 @@
-public enum Type {A, B
-}
+public enum Type {A, B}

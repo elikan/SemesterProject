@@ -10,7 +10,7 @@ public class Master {
     private ArrayList<Object> clients = new ArrayList<Object>();
     private ArrayList<Job> jobs = new ArrayList<Job>();
     private Socket socket;
-    ObjectInputStream objectInputStream;
+    static ObjectInputStream objectInputStream;
 
     public Master(int portNumber) {
         this.portNumber = portNumber;
